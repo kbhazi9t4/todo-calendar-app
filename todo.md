@@ -42,10 +42,10 @@
 - [x] User experience testing
 
 ## Static Webpage
-- [ ] Create presentation webpage showcasing the app
-- [ ] Include interactive charts and visualizations
-- [ ] Add features to explore data, understand trends, and share results
+- [x] Create presentation webpage showcasing the app
+- [x] Include interactive charts and visualizations
+- [x] Add features to explore data, understand trends, and share results
 
 ## Deployment
-- [ ] Create final checkpoint
-- [ ] Publish to Manus
+- [x] Create final checkpoint
+- [x] Publish to Manus

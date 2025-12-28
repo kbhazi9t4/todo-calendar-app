@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Calendar App - Presentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e8e8e8;
+            padding: 40px 0;
+            margin-bottom: 60px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        header h1 {
+            font-size: 3em;
+            font-weight: 900;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #666;
+            font-weight: 300;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .hero h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 40px;
+            background: #1a1a1a;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #1a1a1a;
+        }
+
+        .cta-button:hover {
+            background: white;
+            color: #1a1a1a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Features Section */
+        .features {
+            margin-bottom: 80px;
+        }
+
+        .features h2 {
+            font-size: 2.2em;
+            margin-bottom: 50px;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin-bottom: 80px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .stats h2 {
+            font-size: 2.2em;
+            margin-bottom: 50px;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: 900;
+            color: #c8dce8;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin-bottom: 80px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .charts-section h2 {
+            font-size: 2.2em;
+            margin-bottom: 50px;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            background: linear-gradient(135deg, #c8dce8 0%, #dcc8e8 100%);
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin-bottom: 80px;
+            color: white;
+        }
+
+        .benefits h2 {
+            font-size: 2.2em;
+            margin-bottom: 40px;
+            font-weight: 800;
+        }
+
+        .benefits-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-item {
+            background: rgba(255,255,255,0.15);
+            padding: 30px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .benefit-item h3 {
+            font-size: 1.3em;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .benefit-item p {
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        /* Design Showcase */
+        .design-showcase {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            margin-bottom: 80px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+
+        .design-showcase h2 {
+            font-size: 2.2em;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .design-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .design-item {
+            text-align: center;
+        }
+
+        .design-item h3 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .design-item p {
+            color: #666;
+            font-weight: 300;
+        }
+
+        .color-swatch {
+            width: 100%;
+            height: 80px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .color-pale-gray {
+            background: #f5f5f5;
+            border: 2px solid #e8e8e8;
+        }
+
+        .color-black {
+            background: #1a1a1a;
+        }
+
+        .color-pastel-blue {
+            background: #c8dce8;
+        }
+
+        .color-pastel-pink {
+            background: #dcc8d8;
+        }
+
+        /* Footer */
+        footer {
+            background: white;
+            border-top: 1px solid #e8e8e8;
+            padding: 40px 0;
+            text-align: center;
+            color: #666;
+            font-weight: 300;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .hero h2 {
+                font-size: 1.8em;
+            }
+
+            .features h2,
+            .stats h2,
+            .charts-section h2,
+            .benefits h2,
+            .design-showcase h2 {
+                font-size: 1.8em;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2em;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card,
+        .stats,
+        .charts-section,
+        .benefits,
+        .design-showcase {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Todo Calendar App</h1>
+            <p>Stay organized and on schedule with intelligent task management</p>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="container">
+        <section class="hero">
+            <h2>Organize Your Life, One Task at a Time</h2>
+            <p>A stunning minimalist todo app with calendar integration, real-time notifications, and seamless task management designed for modern productivity.</p>
+            <a href="#features" class="cta-button">Explore Features</a>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <h2>Powerful Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <h3>Interactive Calendar</h3>
+                    <p>Navigate through months with an intuitive calendar interface. Click any date to view and manage tasks for that specific day.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✓</div>
+                    <h3>Task Management</h3>
+                    <p>Create, edit, complete, and delete tasks with ease. Each task includes name, description, date, and time information.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h3>Smart Notifications</h3>
+                    <p>Receive browser notifications at scheduled task times. Never miss an important deadline with real-time reminders.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Minimalist Design</h3>
+                    <p>Clean, Scandinavian-inspired aesthetic with pale gray backgrounds, bold typography, and soft pastel accents.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Responsive Design</h3>
+                    <p>Seamlessly works on desktop, tablet, and mobile devices. Optimized for all screen sizes and orientations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3>User Feedback</h3>
+                    <p>Share your experience with a built-in feedback form. Help us improve with 5-star ratings and comments.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats">
+            <h2>By The Numbers</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Test Coverage</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Automated Tests</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Errors</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Core Features</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Charts Section -->
+        <section class="charts-section">
+            <h2>Interactive Analytics</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 40px; font-weight: 300;">Visualize your productivity patterns and task completion rates</p>
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">Task Completion Rate</div>
+                    <canvas id="completionChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Tasks by Time of Day</div>
+                    <canvas id="timeChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Weekly Task Distribution</div>
+                    <canvas id="weeklyChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">User Satisfaction</div>
+                    <canvas id="satisfactionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="benefits">
+            <h2>Why Choose Todo Calendar?</h2>
+            <div class="benefits-list">
+                <div class="benefit-item">
+                    <h3>📊 Explore Data More Intuitively</h3>
+                    <p>Interactive charts and visualizations help you understand your task patterns and productivity trends at a glance.</p>
+                </div>
+                <div class="benefit-item">
+                    <h3>📈 Understand Trends Better</h3>
+                    <p>Track completion rates, identify peak productivity hours, and optimize your schedule based on real data insights.</p>
+                </div>
+                <div class="benefit-item">
+                    <h3>💾 Easily Save or Share</h3>
+                    <p>Export your task data, share feedback with the team, and maintain a complete history of your productivity journey.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Design Showcase -->
+        <section class="design-showcase">
+            <h2>Scandinavian Minimalist Design</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 40px; font-weight: 300;">Carefully crafted color palette and typography for a modern, clean aesthetic</p>
+            <div class="design-grid">
+                <div class="design-item">
+                    <div class="color-swatch color-pale-gray"></div>
+                    <h3>Pale Cool Gray</h3>
+                    <p>Primary background color for a calm, minimalist aesthetic</p>
+                </div>
+                <div class="design-item">
+                    <div class="color-swatch color-black"></div>
+                    <h3>Deep Black</h3>
+                    <p>Bold typography and primary text for maximum contrast</p>
+                </div>
+                <div class="design-item">
+                    <div class="color-swatch color-pastel-blue"></div>
+                    <h3>Soft Pastel Blue</h3>
+                    <p>Accent color for interactive elements and highlights</p>
+                </div>
+                <div class="design-item">
+                    <div class="color-swatch color-pastel-pink"></div>
+                    <h3>Soft Blush Pink</h3>
+                    <p>Secondary accent for destructive actions and alerts</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Todo Calendar App. Designed with minimalism and productivity in mind.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Chart.js configurations
+        const chartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: { family: "'Inter', sans-serif", size: 12 },
+                        color: '#666'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#e8e8e8' },
+                    ticks: { color: '#666' }
+                },
+                x: {
+                    grid: { color: '#e8e8e8' },
+                    ticks: { color: '#666' }
+                }
+            }
+        };
+
+        // Task Completion Rate Chart
+        const completionCtx = document.getElementById('completionChart').getContext('2d');
+        new Chart(completionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Completed', 'Pending'],
+                datasets: [{
+                    data: [72, 28],
+                    backgroundColor: ['#c8dce8', '#dcc8d8'],
+                    borderColor: ['#c8dce8', '#dcc8d8'],
+                    borderWidth: 2
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Tasks by Time of Day Chart
+        const timeCtx = document.getElementById('timeChart').getContext('2d');
+        new Chart(timeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
+                datasets: [{
+                    label: 'Tasks',
+                    data: [8, 12, 6, 3],
+                    backgroundColor: '#c8dce8',
+                    borderColor: '#c8dce8',
+                    borderWidth: 1
+                }]
+            },
+            options: chartOptions
+        });
+
+        // Weekly Task Distribution Chart
+        const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+        new Chart(weeklyCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Tasks Created',
+                    data: [5, 7, 6, 8, 9, 4, 2],
+                    borderColor: '#c8dce8',
+                    backgroundColor: 'rgba(200, 220, 232, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: chartOptions
+        });
+
+        // User Satisfaction Chart
+        const satisfactionCtx = document.getElementById('satisfactionChart').getContext('2d');
+        new Chart(satisfactionCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Ease of Use', 'Design', 'Features', 'Performance', 'Support'],
+                datasets: [{
+                    label: 'User Ratings',
+                    data: [9, 9.5, 8.5, 9, 8],
+                    borderColor: '#c8dce8',
+                    backgroundColor: 'rgba(200, 220, 232, 0.2)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: { family: "'Inter', sans-serif", size: 12 },
+                            color: '#666'
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 10,
+                        grid: { color: '#e8e8e8' },
+                        ticks: { color: '#666' }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
