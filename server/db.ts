@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, tasks, userFeedback, type InsertTask, type InsertUserFeedback } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,67 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Task database helpers
+export async function createTask(task: InsertTask) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  const result = await db.insert(tasks).values(task);
+  return result;
+}
+
+export async function getTasksByUserAndDate(userId: number, date: string) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  return await db.select().from(tasks).where(and(eq(tasks.userId, userId), eq(tasks.dueDate, date)));
+}
+
+export async function getTasksByUser(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  return await db.select().from(tasks).where(eq(tasks.userId, userId));
+}
+
+export async function updateTask(taskId: number, updates: Partial<InsertTask>) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  return await db.update(tasks).set(updates).where(eq(tasks.id, taskId));
+}
+
+export async function deleteTask(taskId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  return await db.delete(tasks).where(eq(tasks.id, taskId));
+}
+
+export async function submitFeedback(feedback: InsertUserFeedback) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  return await db.insert(userFeedback).values(feedback);
+}
+
+export async function getTasksForNotification(date: string, time: string) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+  return await db.select().from(tasks).where(
+    and(
+      eq(tasks.dueDate, date),
+      eq(tasks.dueTime, time),
+      eq(tasks.notificationSent, 0),
+      eq(tasks.completed, 0)
+    )
+  );
+}

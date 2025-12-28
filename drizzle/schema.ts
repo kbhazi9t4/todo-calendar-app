@@ -25,4 +25,29 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+export const tasks = mysqlTable("tasks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  dueDate: varchar("dueDate", { length: 10 }).notNull(), // YYYY-MM-DD format
+  dueTime: varchar("dueTime", { length: 8 }).notNull(), // HH:MM format (24-hour)
+  completed: int("completed").default(0).notNull(), // 0 = false, 1 = true
+  notificationSent: int("notificationSent").default(0).notNull(), // 0 = false, 1 = true
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Task = typeof tasks.$inferSelect;
+export type InsertTask = typeof tasks.$inferInsert;
+
+export const userFeedback = mysqlTable("user_feedback", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  rating: int("rating").notNull(), // 1-5 stars
+  comment: text("comment"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type UserFeedback = typeof userFeedback.$inferSelect;
+export type InsertUserFeedback = typeof userFeedback.$inferInsert;
